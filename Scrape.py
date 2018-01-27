@@ -7,9 +7,10 @@ accepted_scheme = ['http://', 'https://', 'ftp']
 
 
 def getStrippedLink(link):
-    stripped_link = link
+    parse = urlparse(link)
+    stripped_link = parse[1]
     if 'www.' in link or 'http://' in link or 'https://' in link:
-        stripped_link = link.strip('https://').strip('http://').strip('www.')
+        stripped_link = stripped_link.strip('https://').strip('http://').strip('www.')
     return stripped_link
 
 
@@ -42,12 +43,10 @@ def fileLinkWrite(soup, parse):
     fo.close()
 
 
-def starter():
-    link = str(input("Enter link:"))
-    parse = urlparse(link)
-    stripped_link = getStrippedLink(parse[0])
+def starter(link):
+    stripped_link = getStrippedLink(link)
     page = openURL(link)
     res = page.read()
     soup = BeautifulSoup(res, "html.parser")
     fileTitleWrite(soup, stripped_link)
-    fileLinkWrite(soup, parse)
+    fileLinkWrite(soup, urlparse(link))
