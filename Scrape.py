@@ -6,6 +6,13 @@ from bs4 import BeautifulSoup
 accepted_scheme = ['http://', 'https://', 'ftp']
 
 
+def getStrippedLink(link):
+    stripped_link = link
+    if 'www.' in link or 'http://' in link or 'https://' in link:
+        stripped_link = link.strip('https://').strip('http://').strip('www.')
+    return stripped_link
+
+
 def openURL(link):
     web_link = urllib.request.Request(link, data=None, headers={'User-Agent': 'Mozilla/5.0'})
     try:
@@ -18,7 +25,6 @@ def openURL(link):
 
 def fileTitleWrite(soup, link):
     fo = open("title.txt", "w")
-    fo.write(parse[1]+"\n")
     fo.write(link + "\n")
     fo.write(soup.title.text)
     fo.close()
@@ -36,10 +42,12 @@ def fileLinkWrite(soup, parse):
     fo.close()
 
 
-link = str(input("Enter link:"))
-parse = urlparse(link)
-page = openURL(link)
-res = page.read()
-soup = BeautifulSoup(res, "html.parser")
-fileTitleWrite(soup, link)
-fileLinkWrite(soup, parse)
+def starter():
+    link = str(input("Enter link:"))
+    parse = urlparse(link)
+    stripped_link = getStrippedLink(parse[0])
+    page = openURL(link)
+    res = page.read()
+    soup = BeautifulSoup(res, "html.parser")
+    fileTitleWrite(soup, stripped_link)
+    fileLinkWrite(soup, parse)
