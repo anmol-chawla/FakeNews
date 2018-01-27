@@ -1,4 +1,5 @@
 import urllib.request
+import urllib.error
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
@@ -6,13 +7,18 @@ accepted_scheme = ['http://', 'https://', 'ftp']
 
 
 def openURL(link):
-    web_link = urllib.request.Request(link, data=None, headers={'User-Agent': 'Mozilla/5.0'});
-    handle = urllib.request.urlopen(web_link)
+    web_link = urllib.request.Request(link, data=None, headers={'User-Agent': 'Mozilla/5.0'})
+    try:
+        handle = urllib.request.urlopen(web_link)
+    except urllib.error.HTTPError:
+        print("Page unavailable")
+        exit()
     return handle
 
 
 def fileTitleWrite(soup, link):
     fo = open("title.txt", "w")
+    fo.write(parse[1]+"\n")
     fo.write(link + "\n")
     fo.write(soup.title.text)
     fo.close()
@@ -32,7 +38,6 @@ def fileLinkWrite(soup, parse):
 
 link = str(input("Enter link:"))
 parse = urlparse(link)
-print(parse[1])
 page = openURL(link)
 res = page.read()
 soup = BeautifulSoup(res, "html.parser")
