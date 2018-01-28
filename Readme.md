@@ -1,10 +1,10 @@
-#**Fake News Detector**
+# **Fake News Detector**
 
-##Languages Required:
+## Languages Required:
 Python
 Java
 
-##Platforms Developed for :
+## Platforms Developed for :
 PC
 Android
 
