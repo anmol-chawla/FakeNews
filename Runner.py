@@ -8,7 +8,12 @@ def checkDomain():
     fo = open('title.txt')
     link = fo.readline().rstrip("\n")
     fo.close()
-    return Compare.check(link)
+    ret = Compare.check(link)
+    if ret==1:
+        return True
+    else:
+        reasons.set(Compare.check(link))
+        return False
 
 
 def checkLinks():
@@ -37,6 +42,8 @@ root = Tk()
 root.title("FakeNews")
 link = StringVar()
 results = StringVar()
+reasons = StringVar();
+reasons.set("N/A")
 mainframe = ttk.Frame(root, padding="6 6 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
 mainframe.columnconfigure(0, weight=1)
@@ -46,10 +53,13 @@ ttk.Label(mainframe, text="Input").grid(column=0, row=2, sticky=W)
 word_entry = ttk.Entry(mainframe, width=55, textvariable=link)
 word_entry.grid(column=1, row=2, sticky=(W, E))
 
-ttk.Button(mainframe, text="Run", command=lambda: result(link.get())).grid(column=3, row=5, sticky=W)
+ttk.Button(mainframe, text="Run", command=lambda: result(link.get())).grid(column=3, row=6, sticky=W)
 
 ttk.Label(mainframe, text="Result :").grid(column=0, row=4, sticky=W)
 ttk.Label(mainframe, textvariable=results).grid(column=1, row=4, sticky=(W, E))
+
+ttk.Label(mainframe, text='Reason:').grid(column=0, row=5, sticky=W)
+ttk.Label(mainframe, textvariable=reasons).grid(column=1, row=5, sticky=(W, E))
 
 for child in mainframe.winfo_children():
     child.grid_configure(padx=5, pady=5)

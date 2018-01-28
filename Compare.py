@@ -6,5 +6,5 @@ def check(domain):
         fields = csv.reader(csv_data)
         for row in fields:
             if domain == row[0]:
-                return False
-    return True
+                return row[1]
+    return 1
